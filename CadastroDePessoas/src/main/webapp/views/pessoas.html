@@ -1,0 +1,127 @@
+<div class="row">
+    <div class="col-md-6">
+        <h2>Pessoas</h2>     
+    </div>
+</div> 
+   
+<hr>
+
+<div class="row">
+    <div class="col-md-6" >
+        <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#inserir"> Inserir </button>  
+    </div>
+    <div class="col-md-6" class="pull-right">
+        <div class="input-group custom-search-form ">
+            <input type="text" class="form-control" ng-model="criterioDeBusca"  placeholder="Pesquisar..">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div><!-- /input-group -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="margin-top:20px;margin-bottom:10px;"> 
+
+        <table id="mytable" class="table table-bordered table-striped  table-condensed">
+            <thead>
+            <th><a href="" ng-click="ordenarPor('nome')">Nome <i class="fa fa-sort pull-right"></i></a></th>
+            <th><a href="" ng-click="ordenarPor('sexo')">Sexo <i class="fa fa-sort pull-right"></i></a></th>
+            <th><a href="" ng-click="ordenarPor('dataNascimento')">Data De Nascimento <i class="fa fa-sort pull-right"></i></a></th>
+            <th style="width: 10px;"></th>                                                              
+            </thead>
+            <tbody>
+                <tr  ng-repeat="pessoa in pessoas| filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao  |  limitTo:entryLimit">
+                    <td>{{pessoa.nome}}</td>
+                    <td>{{pessoa.sexo}}</td>
+                    <td>{{mostraData(pessoa.dataNascimento)}}</td>  
+                    <td>         
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Editar <span class="caret"></span>  
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a ng-click="carregaPessoa(pessoa.id)" href="#" data-toggle="modal" data-target="#editar" data-title="Edit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar</a></li>
+                                <li><a ng-click="deletePessoa(pessoa.id)" href="#/usuarios"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>            
+        </table>
+
+        <div class="row">   
+            <div class="col-md-6" class="pull-left">
+                Mostrar
+                <select ng-model="paginas" ng-change="setItemsPagina(paginas)">
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
+                    <option>50</option>
+                    <option>100</option>
+                    <option>Todas</option>
+                </select> linhas                
+            </div>
+        </div>        
+    </div>
+</div>
+
+
+<div class="modal fade" id="inserir">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Adicionando Pessoa</h4>
+          </div>
+          <div class="modal-body">
+            <form name="inseriLinha" id="inseriLinha"> 
+                <div class="form-group">
+                   <input type="text" name="mnb" id="mnb" class="form-control" placeholder="Nome" ng-model="pessoa.nome" required>
+                </div>
+                <div class="form-group">
+                   <input type="text" name="poi" id="poi" class="form-control" placeholder="Sexo" ng-minlength="8" ng-model="pessoa.sexo" required>
+                </div>
+                <div class="form-group">
+                    <input type="date" name="sdf" id="sdf" class="form-control" placeholder="Data de Nascimento" ng-model="pessoa.dataNascimento">
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="limpaVariaveis()">Fechar</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="createNewPessoa()" ng-disabled="inseriLinha.$invalid">Gravar</button>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Editando Pessoa</h4>
+          </div>
+          <div class="modal-body">
+            <form name="editaLinha" id="editaLinha"> 
+                <div class="form-group">
+                   <input type="text" name="mnb" id="mnb" class="form-control" placeholder="Nome" ng-model="pessoa.nome" required>
+                </div>
+                <div class="form-group">
+                   <input type="text" name="poi" id="poi" class="form-control" placeholder="Sexo" ng-minlength="8" ng-model="pessoa.sexo" required>
+                </div>
+                <div class="form-group">
+                    <input type="date" name="sdf" id="sdf" class="form-control" placeholder="Data de Nascimento" ng-model="pessoa.dataNascimento">
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="limpaVariaveis()">Fechar</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="updatePessoa()" ng-disabled="editaLinha.$invalid" onclick="$('#editar').modal('hide')" >Gravar</button>
+          </div>
+        </div>
+    </div>
+</div>  
